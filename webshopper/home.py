@@ -3,7 +3,6 @@ from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
 
-from werkzeug.security import check_password_hash, generate_password_hash
 
 from webshopper.db import get_db
 
@@ -31,5 +30,10 @@ def homepage():
     # Checking if user is logged in
     if g.user is None:
         return redirect(url_for('auth.login'))
-
+    # Successful login.
+    # Check if the user has selected a location yet
+    if session.get('location_id') is None:
+        print('location_id is none')
+        return redirect(url_for('settings.set_location'))
+    # Location id is set
     return render_template('homepage.html')

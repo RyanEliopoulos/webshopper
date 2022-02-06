@@ -46,6 +46,7 @@ def login():
                 session.clear()
                 session['user_id'] = user['id']
                 session['username'] = user['username']
+                session['location_id'] = user['location_id']
                 return redirect(url_for('home.homepage'))
 
         flash(error)

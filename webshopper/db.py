@@ -3,11 +3,55 @@ import sqlite3
 import click
 from flask import current_app, g
 from flask.cli import with_appcontext
+from typing import Tuple
 
 
-def get_db():
+def _execute_query(db_cursor: sqlite3.Cursor
+                   , sql_string: str
+                   , parameters: tuple = None) -> Tuple[int, dict]:
+    """ Wrapper for cursor.execute. """
+    try:
+        if parameters is None:
+            db_cursor.execute(sql_string)
+        else:
+            db_cursor.execute(sql_string, parameters)
+        return 0, {}
+
+    except sqlite3.Error as e:
+        return -1, {'error_message': str(e)}
+
+
+def get_ctoken(db_cursor: sqlite3.Cursor) -> Tuple[int, dict]:
+    """ Retrieves client token and timestamp from database """
+    query: str = """    SELECT *
+                        FROM tokens 
+                 """
+    ret = _execute_query(db_cursor, query)
+    if ret[0] != 0:  # Error executing query
+        return ret
+    results: dict = db_cursor.fetchone()
+    return_dict = {
+        'client_token': results['token'],
+        'timestamp': results['timestamp']
+    }
+    return 0, return_dict
+
+
+def set_ctoken(db_cursor: sqlite3.Cursor
+               , token: str
+               , timestamp: int) -> Tuple[int, dict]:
+    """ Updates client token db entry """
+    query: str = """ UPDATE tokens 
+                     SET token = ?, timestamp = ?
+                     WHERE tokens.token_type = 'client'
+                 """
+    ret = _execute_query(db_cursor, query, (token, timestamp))
+    return ret
+
+
+def get_db() -> sqlite3.Connection:
     if 'db' not in g:
-        g.db: sqlite3.Connection = sqlite3.connect(
+        g.db = sqlite3.connect(
             current_app.config['DATABASE'],
             detect_types=sqlite3.PARSE_DECLTYPES
         )

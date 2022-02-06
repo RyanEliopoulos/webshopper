@@ -38,6 +38,9 @@ def create_app(test_config=None):
     from . import home
     app.register_blueprint(home.bp)
 
+    from . import settings
+    app.register_blueprint(settings.bp)
+
     #
     # from . import blog
     # app.register_blueprint(blog.bp)

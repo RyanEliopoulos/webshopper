@@ -18,10 +18,20 @@
 --
 
 DROP TABLE IF EXISTS user;
+DROP TABLE IF EXISTS tokens;
 
 CREATE TABLE user (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT UNIQUE NOT NULL,
     password_hash TEXT NOT NULL,
     location_id TEXT
-)
+);
+
+CREATE TABLE tokens (
+    token_type TEXT UNIQUE NOT NULL,
+    token TEXT UNIQUE NOT NULL,
+    timestamp  INTEGER NOT NULL
+);
+
+INSERT INTO tokens VALUES ('client', 'client-token', 0);
+INSERT INTO tokens VALUES ('customer', 'customer-token', 0);
