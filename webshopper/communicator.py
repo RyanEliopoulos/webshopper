@@ -251,3 +251,38 @@ class Communicator:
         print(req.json())
         # ASSUMING WE NEED THE CUSTOMER TOKEN BEFORE WE CAN SEARCH LOCATIONS
         return 0, {'results': rez}
+<<<<<<< HEAD
+
+    @staticmethod
+    def search_product(search_term: str) -> Tuple[int, dict]:
+        if len(search_term) < 4:
+            return -1, {'error_message': 'String must be at least 3 characters'}
+        ret = Communicator._get_token()
+        if ret[0] != 0:
+            return ret
+        access_token: str = ret[1]['access_token']
+        headers: dict = {
+            'Accept': 'application/json'
+            , 'Authorization': f'Bearer {access_token}'
+        }
+
+        params = {
+            'filter.term': search_term,
+            'filter.locationId': '70100140',
+            'filter.fulfillment': 'csp',
+            'filter.start': '1',
+            'filter.limit': '5',
+        }
+        # encoded_params = urllib.parse.urlencode(params)
+        # target_url: str = f'{self.api_base}products/{encoded_params}'
+        target_url: str = f'{Communicator.api_base}products'
+
+        req = requests.get(target_url, headers=headers, params=params)
+        if req.status_code != 200:
+            # Logger.Logger.log_error(f'Error searching for product: {req.text}')
+            print(f'Status code: {req.status_code}')
+            print(f'Status code: {req.text}')
+            exit(1)
+
+        return 0, req.json()
+>>>>>>> products
