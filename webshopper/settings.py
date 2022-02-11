@@ -34,4 +34,18 @@ def set_location():
         return 'Here is the list of nearby stores'
 
 
+@bp.route('/products', methods=('GET', 'POST'))
+@login_required
+@token_required
+def products():
+
+    # Ask user to enter in their area code
+    # Have the client submit a request to our API endpoint that
+    # in turn makes a request to the Kroger API.
+
+    if request.method == 'GET':
+        ret = Communicator.search_product('beef')
+        return render_template(f'{ret}')
+
+
 
