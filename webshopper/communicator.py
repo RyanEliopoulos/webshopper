@@ -182,26 +182,20 @@ class Communicator:
             return ret
         return 0, {}
 
-    # @staticmethod
-    # def _get_token() -> Tuple[int, dict]:
-    #     """  Success: 0, token_dict
-    #          db error: -1, error_dict
-    #          expired tokens: -2, error_dict
-    #     """
-    #     conn: sqlite3.Connection = db.get_db()
-    #     cursor: sqlite3.Cursor = conn.cursor()
-    #     ret: Tuple = db.get_custokens(cursor, session.get('user_id'))
-    #     if ret[0] != 0:
-    #         return ret
-    #     # Checking access token freshness
-    #     token_dict: dict = ret[1]
-    #     if Communicator._check_ctoken(token_dict['access_timestamp']):
-    #         return 0, token_dict
-    #     # access token expired. Checking refresh token for freshness
-    #     if Communicator._check_rtoken(token_dict['refresh_timestamp']):
-    #         ### NEED A RETRIEVE TOKENS METHOD CALL HERE
-    #         return 0, token_dict
-    #     return -2, {'error_message': 'Both tokens expired'}
+    @staticmethod
+    def _get_token() -> Tuple[int, dict]:
+        """  Success: 0, token_dict
+             db error: -1, error_dict
+
+             Token is not check for freshness as all endpoints are wrapped in a check.
+        """
+        conn: sqlite3.Connection = db.get_db()
+        cursor: sqlite3.Cursor = conn.cursor()
+        ret: Tuple = db.get_custokens(cursor, session.get('user_id'))
+        if ret[0] != 0:
+            return ret
+        token_dict: dict = ret[1]
+        return 0, {'access_token': token_dict['access_token']}
 
     @staticmethod
     def token_check() -> Tuple[int, dict]:
@@ -230,29 +224,27 @@ class Communicator:
         # No valid tokens
         return -2, {'error_message': 'No valid tokens'}
 
-    # @staticmethod
-    # def search_locations(zipcode: str) -> Tuple[int, dict]:
-    #     ###  Seems to require customer token
-    #     ### BUILD REQUEST TO ENDPOIN
-    #     ### RETURN RESULTS
-    #     # Building request
-    #     ret = Communicator._client_token()
-    #     if ret[0] != 0:
-    #         return ret
-    #     # client_token: str = ret[1]['client_token']
-    #     # headers = {
-    #     #     'Accept': 'application/json',
-    #     #     'Authorization': f'Bearer {client_token}'
-    #     # }
-    #     # data = {
-    #     #     'filter.zipCode.near': zipcode
-    #     # }
-    #     # target_url: str = Communicator.api_base + 'locations'
-    #     # req: requests.Response = requests.get(target_url, headers=headers, json=data)
-    #     # if req.status_code != 200:
-    #     #     return -1, {'error_message': req.text}
-    #     # print(req.json())
-    #
-    #
-    #     # ASSUMING WE NEED THE CUSTOMER TOKEN BEFORE WE CAN SEARCH LOCATIONS
-    #     return 0, {'results': 'rez'}
+    @staticmethod
+    def search_locations(zipcode: str) -> Tuple[int, dict]:
+        # Token freshness is enforced by endpoint wrapper upon request.
+        # No need to check here
+        ret = Communicator._get_token()
+        if ret[0] != 0:
+            return ret
+        # Building request
+        access_token: str = ret[1]['access_token']
+        headers = {
+            'Accept': 'application/json',
+            'Authorization': f'Bearer {access_token}'
+        }
+        data = {
+            'filter.zipCode.near': zipcode
+        }
+        target_url: str = Communicator.api_base + 'locations'
+        req: requests.Response = requests.get(target_url, headers=headers, json=data)
+        if req.status_code != 200:
+            return -1, {'error_message': req.text}
+        rez = req.json()
+        print(req.json())
+        # ASSUMING WE NEED THE CUSTOMER TOKEN BEFORE WE CAN SEARCH LOCATIONS
+        return 0, {'results': rez}
