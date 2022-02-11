@@ -53,6 +53,10 @@ class Communicator:
         return True
 
     @staticmethod
+    def write_tokens(user_id: int, access_token: str, access_timestamp):
+        ...
+
+    @staticmethod
     def build_auth_url() -> str:
         """ Builds Kroger user authorization URL.
         """
@@ -69,9 +73,36 @@ class Communicator:
         return target_url
 
     @staticmethod
-    def tokens_from_auth(auth_code: str):
+    def tokens_from_auth(auth_code: str) -> Tuple[int, dict]:
         """ Exchanges the auth code for customer tokens
         """
+        headers: dict = {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
+        data: dict = {
+            'grant_type': 'authorization_code'
+            , 'redirect_uri': Communicator.redirect_uri
+            , 'scope': 'profile.compact cart.basic:write product.compact'
+            , 'code': auth_code
+        }
+        target_url: str = Communicator.api_base + Communicator.api_token
+        req = requests.post(target_url, headers=headers, data=data,
+                            auth=(Communicator.client_id, Communicator.client_secret))
+        if req.status_code != 200:
+            # Logger.Logger.log_error('Error retrieving tokens with auth code --- ' + req.text)
+            print('error retrieving tokens with authorization_code')
+            print(req.text)
+            return -1, {'error_message': f'{req.text}'}
+        req = req.json()
+        access_timestamp: float = datetime.datetime.now().timestamp()
+        token_dict = {
+            'access_token': req['access_token'],
+            'access_timestamp': access_timestamp,
+            'refresh_token': req['refresh_token'],
+            'refresh_timestamp': access_timestamp
+        }
+        print("..Tokens retrieved")
+        return 0, token_dict
 
     @staticmethod
     def _client_token() -> Tuple[int, dict]:

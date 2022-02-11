@@ -71,6 +71,28 @@ def set_ctoken(db_cursor: sqlite3.Cursor
     return ret
 
 
+def update_tokens(access_token: str, access_timestamp: float, refresh_token: str
+                  , refresh_timestamp: float, user_id: int) -> Tuple[int, dict]:
+    query = """ UPDATE user
+                SET    
+                    access_token = ? 
+                    , access_timestamp = ?
+                    , refresh_token = ?
+                    , refresh_timestamp = ?
+                WHERE user_id = ?
+            """
+    db: sqlite3.Connection = get_db()
+    curs = db.cursor()
+    ret = _execute_query(curs, query, (access_token,
+                                       access_timestamp,
+                                       refresh_token,
+                                       refresh_timestamp,
+                                       user_id))
+    if ret[0] != 0:
+        db.commit()
+    return ret
+
+
 def get_db() -> sqlite3.Connection:
     if 'db' not in g:
         g.db = sqlite3.connect(
@@ -108,6 +130,3 @@ def init_db_command():
 def init_app(app):
     app.teardown_appcontext(close_db)  # instructions followed after requesting concludes
     app.cli.add_command(init_db_command)  # Command line option
-
-
-

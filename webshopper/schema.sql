@@ -26,9 +26,9 @@ CREATE TABLE user (
     password_hash TEXT NOT NULL,
     location_id TEXT,
     access_token TEXT DEFAULT 'default',
-    access_timestamp INTEGER DEFAULT 0,
+    access_timestamp FLOAT DEFAULT 0,
     refresh_token TEXT DEFAULT 'default',
-    refresh_timestamp INTEGER DEFAULT 0
+    refresh_timestamp FLOAT DEFAULT 0
 );
 
 CREATE TABLE tokens (

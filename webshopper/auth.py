@@ -6,7 +6,8 @@ from flask import (
 
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from webshopper.db import get_db
+from webshopper.db import (get_db, update_tokens)
+
 
 
 bp = Blueprint('auth', __name__)
@@ -102,12 +103,24 @@ def get_authcode():
 
 @bp.route('/get_tokens')
 def trade_authcode():
-    """ Kroger redirects here after user authorizes use of our app.
+    """ Kroger redirects here with an auth code after user authorizes use of our app.
         Turn the given auth code into
     """
-    # Utilize Communicator now.
     auth_code: str = request.args.get('code')
-    return f'{auth_code}'
+    # Utilize Communicator now to get the tokens.
+    ret = Communicator.tokens_from_auth(auth_code)
+    if ret[0] != 0:
+        return f'tokens from auth error: {ret[1]}'
+    token_dict: dict = ret[1]
+    ret = update_tokens(token_dict['access_token'],
+                        token_dict['access_timestamp'],
+                        token_dict['refresh_token'],
+                        token_dict['refres_timestamp'],
+                        session.get('user_id'))
+    if ret[0] != 0:
+        return f'error updating tokens in db: {ret[1]}'
+
+    return redirect('home.homepage')
 
 
 @bp.route('/logout')
