@@ -242,7 +242,8 @@ class Communicator:
         }
         print(f'lcoation searching use tokne: {access_token}')
         target_url: str = Communicator.api_base + 'locations'
-        req: requests.Response = requests.get(target_url, headers=headers, json=data)
+        print(f'target_url: {target_url}')
+        req: requests.Response = requests.get(target_url, headers=headers, data=data)
         if req.status_code != 200:
             print(f'Request status code: {req.status_code}')
             return -1, {'error_message': req.text}
