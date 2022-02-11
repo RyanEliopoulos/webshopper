@@ -21,11 +21,10 @@ class Communicator:
     """
     client_id = os.getenv('kroger_app_client_id')
     client_secret = os.getenv('kroger_app_client_secret')
-    redirect_uri = ''
+    redirect_uri = os.getenv('kroger_app_redirect_uri')
     api_base = "https://api.kroger.com/v1/"
     api_token: str = 'connect/oauth2/token'
     api_authorize: str = 'connect/oauth2/authorize'  # "human" consent w/ redirect endpoint
-    redirect_uri: str = 'http://localhost:8000'
     token_timeout: float = 1500  # Seconds after which we are considering the token expired. Actually 1800.
     refresh_timeout: float = 60 * 60 * 24 * 7 * 4 * 5 # ~Seconds in a 5 month period (tokens last 6 months)
 
