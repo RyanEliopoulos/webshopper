@@ -228,6 +228,7 @@ def token_required(view):
             # DB error
             return render_template(f'{ret}')
         if return_code == ret[-2]:
+            print('No valid tokens')
             return redirect(url_for('auth.get_authcode'))
         return view(**kwargs)
 
