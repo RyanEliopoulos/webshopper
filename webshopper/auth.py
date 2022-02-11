@@ -107,7 +107,7 @@ def trade_authcode():
     """
     # Utilize Communicator now.
     auth_code: str = request.args.get('code')
-    print(f'Got the token from kroger: {auth_code}')
+    return render_template(f'auth_code: {auth_code}')
 
 
 @bp.route('/logout')
