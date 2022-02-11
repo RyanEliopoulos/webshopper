@@ -112,6 +112,8 @@ def trade_authcode():
     if ret[0] != 0:
         return f'tokens from auth error: {ret[1]}'
     token_dict: dict = ret[1]
+    user_id = session.get('user_id')
+    print(f"User id is {user_id}")
     ret = update_tokens(token_dict['access_token'],
                         token_dict['access_timestamp'],
                         token_dict['refresh_token'],
@@ -120,7 +122,7 @@ def trade_authcode():
     if ret[0] != 0:
         return f'error updating tokens in db: {ret[1]}'
 
-    return redirect('home.homepage')
+    return redirect(url_from('home.homepage'))
 
 
 @bp.route('/logout')
