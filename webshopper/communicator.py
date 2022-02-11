@@ -237,20 +237,15 @@ class Communicator:
             'Accept': 'application/json',
             'Authorization': f'Bearer {access_token}'
         }
-        data = {
+        # Must be params. Call requests.get with these classed as 'data' failed the API call
+        params = {
             'filter.zipCode.near': zipcode
         }
-        print(f'lcoation searching use tokne: {access_token}')
         target_url: str = Communicator.api_base + 'locations'
-        print(f'target_url: {target_url}')
-        req: requests.Response = requests.get(target_url, headers=headers, data=data)
+        req: requests.Response = requests.get(target_url, headers=headers, params=params)
         if req.status_code != 200:
-            print(f'Request status code: {req.status_code}')
-            return -1, {'error_message': req.text}
-        rez = req.json()
-        print(req.json())
-        # ASSUMING WE NEED THE CUSTOMER TOKEN BEFORE WE CAN SEARCH LOCATIONS
-        return 0, {'results': rez}
+            return -1, {'error_message': f'{req.status_code}: {req.text}'}
+        return 0, {'results': req.json()}
 
     @staticmethod
     def search_product(search_term: str) -> Tuple[int, dict]:
@@ -264,7 +259,6 @@ class Communicator:
             'Accept': 'application/json'
             , 'Authorization': f'Bearer {access_token}'
         }
-
         params = {
             'filter.term': search_term,
             'filter.locationId': '70100140',
@@ -272,15 +266,8 @@ class Communicator:
             'filter.start': '1',
             'filter.limit': '5',
         }
-        # encoded_params = urllib.parse.urlencode(params)
-        # target_url: str = f'{self.api_base}products/{encoded_params}'
         target_url: str = f'{Communicator.api_base}products'
-
         req = requests.get(target_url, headers=headers, params=params)
         if req.status_code != 200:
-            # Logger.Logger.log_error(f'Error searching for product: {req.text}')
-            print(f'Status code: {req.status_code}')
-            print(f'Status code: {req.text}')
-            exit(1)
-
+            return -1, {'error_message': f'{req.status_code}: {req.text}'}
         return 0, req.json()

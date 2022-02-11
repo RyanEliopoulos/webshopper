@@ -31,7 +31,7 @@ def set_location():
         print(f'This is the zip code: {zip_code}')
         stores = Communicator.search_locations(zip_code)
         print(f"Stores: {stores}")
-        return 'Here is the list of nearby stores'
+        return f'Here is the list of nearby stores: {stores}'
 
 
 @bp.route('/products', methods=('GET', 'POST'))
@@ -45,7 +45,7 @@ def products():
 
     if request.method == 'GET':
         ret = Communicator.search_product('beef')
-        return render_template(f'{ret}')
+        return f'{ret}'
 
 
 
