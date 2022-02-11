@@ -122,7 +122,7 @@ def trade_authcode():
     if ret[0] != 0:
         return f'error updating tokens in db: {ret[1]}'
 
-    return redirect(url_from('home.homepage'))
+    return redirect(url_for('home.homepage'))
 
 
 @bp.route('/logout')
