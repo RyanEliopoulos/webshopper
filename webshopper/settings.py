@@ -1,5 +1,6 @@
 import functools
 from webshopper.communicator import Communicator
+from webshopper.auth import login_required
 
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
@@ -10,6 +11,7 @@ bp = Blueprint('settings', __name__)
 
 
 @bp.route('/location', methods=('GET', 'POST'))
+@login_required
 def set_location():
 
     # Ask user to enter in their area code
@@ -29,3 +31,6 @@ def set_location():
         stores = Communicator.search_locations(zip_code)
         print(f"Stores: {stores}")
         return 'Here is the list of nearby stores'
+
+
+

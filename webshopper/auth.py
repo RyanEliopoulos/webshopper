@@ -1,4 +1,5 @@
 import functools
+from webshopper.communicator import Communicator
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
@@ -89,6 +90,16 @@ def register():
         return render_template('auth/register.html')
 
 
+@bp.route('/get_authcode')
+def get_authcode():
+    """ Called by the token_required decorator
+        in the absence of valid API tokens
+    """
+    print('Redirect to Kroger auth')
+    target_url: str = Communicator.build_auth_url()
+    return redirect(target_url)
+
+
 @bp.route('/logout')
 def logout():
     session.clear()
@@ -173,11 +184,26 @@ def logout():
 #     return redirect(url_for('index'))
 #
 #
-# def login_required(view):
-#     @functools.wraps(view)
-#     def wrapped_view(**kwargs):
-#         if g.user is None:
-#             return redirect(url_for('auth.login'))
-#         return view(**kwargs)
-#
-#     return wrapped_view
+def login_required(view):
+    @functools.wraps(view)
+    def wrapped_view(**kwargs):
+        if session.get('user_id') is None:
+            return redirect(url_for('auth.login'))
+        return view(**kwargs)
+
+    return wrapped_view
+
+
+def token_required(view):
+    @functools.wraps(view)
+    def wrapped_view(**kwargs):
+        ret = Communicator.token_check()
+        return_code = ret[0]
+        if return_code == -1:
+            # DB error
+            return render_template(f'{ret}')
+        if return_code == ret[-2]:
+            return redirect(url_for('auth.get_authcode'))
+        return view(**kwargs)
+
+    return wrapped_view

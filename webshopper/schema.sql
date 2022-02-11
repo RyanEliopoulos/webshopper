@@ -24,7 +24,11 @@ CREATE TABLE user (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT UNIQUE NOT NULL,
     password_hash TEXT NOT NULL,
-    location_id TEXT
+    location_id TEXT,
+    access_token TEXT,
+    access_timestamp INTEGER,
+    refresh_token TEXT,
+    refresh_timestamp INTEGER
 );
 
 CREATE TABLE tokens (

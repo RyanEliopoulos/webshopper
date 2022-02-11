@@ -21,7 +21,7 @@ def _execute_query(db_cursor: sqlite3.Cursor
         return -1, {'error_message': str(e)}
 
 
-def get_ctoken(db_cursor: sqlite3.Cursor) -> Tuple[int, dict]:
+def get_clitoken(db_cursor: sqlite3.Cursor) -> Tuple[int, dict]:
     """ Retrieves client token and timestamp from database """
     query: str = """    SELECT *
                         FROM tokens 
@@ -33,6 +33,28 @@ def get_ctoken(db_cursor: sqlite3.Cursor) -> Tuple[int, dict]:
     return_dict = {
         'client_token': results['token'],
         'timestamp': results['timestamp']
+    }
+    return 0, return_dict
+
+
+def get_custokens(db_cursor: sqlite3.Cursor, user_id: int) -> Tuple[int, dict]:
+    """ Retrieves customer access token, refresh token and their timestamps """
+    query: str = """ SELECT  access_token
+                            , access_timestamp
+                            , refresh_token
+                            , refresh_timestamp
+                     FROM user
+                     WHERE id = ? 
+                """
+    ret = _execute_query(db_cursor, query, (user_id,))
+    if ret[0] != 0:
+        return ret
+    results: dict = db_cursor.fetchone()
+    return_dict = {
+        'access_token': results['access_token'],
+        'access_timestamp': results['access_timestamp'],
+        'refresh_token': results['refresh_token'],
+        'refresh_timestamp': results['refresh_timestamp']
     }
     return 0, return_dict
 
