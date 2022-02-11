@@ -196,6 +196,7 @@ class Communicator:
         tokens: dict = ret[1]
         print(f"Token dict: {tokens}")
         if Communicator._check_ctoken(tokens['access_timestamp']):
+            print("In token check. Returning 0 ret ")
             return 0, {'success_message': 'valid access token'}
         if Communicator._check_rtoken(tokens['refresh_timestamp']):
             # @todo token refresh function
