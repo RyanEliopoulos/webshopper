@@ -251,7 +251,6 @@ class Communicator:
         print(req.json())
         # ASSUMING WE NEED THE CUSTOMER TOKEN BEFORE WE CAN SEARCH LOCATIONS
         return 0, {'results': rez}
-<<<<<<< HEAD
 
     @staticmethod
     def search_product(search_term: str) -> Tuple[int, dict]:
@@ -285,4 +284,3 @@ class Communicator:
             exit(1)
 
         return 0, req.json()
->>>>>>> products
