@@ -55,6 +55,8 @@ class Communicator:
 
     @staticmethod
     def build_auth_url() -> str:
+        """ Builds Kroger user authorization URL.
+        """
         # Preparing URl
         params: dict = {
             'scope': 'profile.compact cart.basic:write product.compact'
@@ -66,6 +68,11 @@ class Communicator:
         encoded_params = urllib.parse.urlencode(params)
         target_url = Communicator.api_base + Communicator.api_authorize + '?' + encoded_params
         return target_url
+
+    @staticmethod
+    def tokens_from_auth(auth_code: str):
+        """ Exchanges the auth code for customer tokens
+        """
 
     @staticmethod
     def _client_token() -> Tuple[int, dict]:
@@ -112,27 +119,6 @@ class Communicator:
             print(conn.commit())
             return 0, {'client_token': token}
 
-
-    # @staticmethod
-    # def authcode_redirect() -> Tuple[int, tuple]:
-    #     """
-    #         Redirects to Kroger API endpoint. Prompts user to consent to
-    #         giving us tokens.
-    #     :return:
-    #     """
-    #     # preparing target URL
-    #     client_id = os.getenv('client_id')
-    #     redirect_uri = os.getenv('redirect_uri')
-    #     params: dict = {
-    #         'scope': 'profile.compact cart.basic:write product.compact'
-    #         , 'client_id': client_id
-    #         , 'redirect_uri': redirect_uri
-    #         , 'response_type': 'code'
-    #         , 'state': 'oftheunion'
-    #     }
-    #     encoded_params = urllib.parse.rulencode(params)
-    #     target_url: str = Communicator.api_base + Communicator.api_authorize + '?' + encoded_params
-
     @staticmethod
     def _refresh_tokens(ref_token: str) -> Tuple[int, dict]:
         """ Pulls fresh access and refresh tokens from Kroger
@@ -178,6 +164,7 @@ class Communicator:
         if ret[0] != 0:
             return ret
         tokens: dict = ret[1]
+        print(f"Token dict: {tokens}")
         if Communicator._check_ctoken(tokens['access_timestamp']):
             return 0, {'success_message': 'valid access token'}
         if Communicator._check_rtoken(tokens['refresh_timestamp']):

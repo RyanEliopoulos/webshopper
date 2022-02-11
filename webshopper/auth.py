@@ -100,6 +100,16 @@ def get_authcode():
     return redirect(target_url)
 
 
+@bp.route('/get_tokens')
+def trade_authcode():
+    """ Kroger redirects here after user authorizes use of our app.
+        Turn the given auth code into
+    """
+    # Utilize Communicator now.
+    auth_code: str = request.args.get('code')
+    print(f'Got the token from kroger: {auth_code}')
+
+
 @bp.route('/logout')
 def logout():
     session.clear()
