@@ -244,9 +244,9 @@ class Communicator:
         target_url: str = Communicator.api_base + 'locations'
         req: requests.Response = requests.get(target_url, headers=headers, json=data)
         if req.status_code != 200:
+            print(f'Request status code: {req.status_code}')
             return -1, {'error_message': req.text}
         rez = req.json()
         print(req.json())
-        print(f'Request status code: {req.status_code}')
         # ASSUMING WE NEED THE CUSTOMER TOKEN BEFORE WE CAN SEARCH LOCATIONS
         return 0, {'results': rez}
