@@ -225,7 +225,7 @@ def token_required(view):
         ret = Communicator.token_check()
         return_code = ret[0]
         if return_code == -1:
-            # DB error
+            # DB or request error to Kroger API
             return render_template(f'{ret}')
         if return_code == -2:
             print('No valid tokens')

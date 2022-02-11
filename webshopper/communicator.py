@@ -9,6 +9,7 @@ import urllib.parse
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
+
 """
 
 
@@ -26,7 +27,7 @@ class Communicator:
     api_token: str = 'connect/oauth2/token'
     api_authorize: str = 'connect/oauth2/authorize'  # "human" consent w/ redirect endpoint
     token_timeout: float = 1500  # Seconds after which we are considering the token expired. Actually 1800.
-    refresh_timeout: float = 60 * 60 * 24 * 7 * 4 * 5 # ~Seconds in a 5 month period (tokens last 6 months)
+    refresh_timeout: float = 60 * 60 * 24 * 7 * 4 * 5  # ~Seconds in a 5 month period (tokens last 6 months)
 
     @staticmethod
     def _check_ctoken(timestamp: int) -> bool:
@@ -106,55 +107,80 @@ class Communicator:
 
     @staticmethod
     def _client_token() -> Tuple[int, dict]:
-            """
+        """
                 Responsible for supplying caller with valid client token.
                 Checks for valid token in the database first. Pulls new
                 token from Kroger and updates db before returning otherwise.
             """
-            print('in client token')
-            conn: sqlite3.Connection = db.get_db()
-            cursor: sqlite3.Cursor = conn.cursor()
-            ret: Tuple = db.get_clitoken(cursor)
-            if ret[0] != 0:
-                return ret
-            # Successful pull from db. Checking validity of timestamp
-            timestamp: int = ret[1]['timestamp']
-            if Communicator._check_ctoken(timestamp):
-                return 0, ret[1]
-            # Expired client token. Requesting new one
-            # Staging request data
-            id: str = os.getenv('kroger_app_client_id')
-            secret: str = os.getenv('kroger_app_client_secret')
-            headers = {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-            data = {
-                'grant_type': 'client_credentials',
-                'scope': 'product.compact'
-            }
-            target_url: str = Communicator.api_base + Communicator.api_token
-            req: requests.Response = requests.post(target_url, headers=headers, data=data,
-                                                  auth=(id, secret))
-            if req.status_code != 200:
-                return -1, {'error_message': f'Problem with client credential request: {req.text}'}
-            # Call successful. Updating database
-            response: dict = req.json()
-            unix_now: float = datetime.datetime.now().timestamp()
-            token: str = response['access_token']
-            print('Updating db with credentials')
-            ret = db.set_ctoken(cursor, token, int(unix_now))
-            if ret[0] != 0:  # error updating database
-                return ret
-            print('commit db')
-            print(conn.commit())
-            return 0, {'client_token': token}
+        print('in client token')
+        conn: sqlite3.Connection = db.get_db()
+        cursor: sqlite3.Cursor = conn.cursor()
+        ret: Tuple = db.get_clitoken(cursor)
+        if ret[0] != 0:
+            return ret
+        # Successful pull from db. Checking validity of timestamp
+        timestamp: int = ret[1]['timestamp']
+        if Communicator._check_ctoken(timestamp):
+            return 0, ret[1]
+        # Expired client token. Requesting new one
+        # Staging request data
+        id: str = os.getenv('kroger_app_client_id')
+        secret: str = os.getenv('kroger_app_client_secret')
+        headers = {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
+        data = {
+            'grant_type': 'client_credentials',
+            'scope': 'product.compact'
+        }
+        target_url: str = Communicator.api_base + Communicator.api_token
+        req: requests.Response = requests.post(target_url, headers=headers, data=data,
+                                               auth=(id, secret))
+        if req.status_code != 200:
+            return -1, {'error_message': f'Problem with client credential request: {req.text}'}
+        # Call successful. Updating database
+        response: dict = req.json()
+        unix_now: float = datetime.datetime.now().timestamp()
+        token: str = response['access_token']
+        print('Updating db with credentials')
+        ret = db.set_ctoken(cursor, token, int(unix_now))
+        if ret[0] != 0:  # error updating database
+            return ret
+        print('commit db')
+        print(conn.commit())
+        return 0, {'client_token': token}
 
     @staticmethod
     def _refresh_tokens(ref_token: str) -> Tuple[int, dict]:
         """ Pulls fresh access and refresh tokens from Kroger
-            using the given token
+            using the given token. Does not return anything if successful.
         """
-        # @TODO This
+        # Prepping request
+        headers = {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
+        data = {
+            'grant_type': 'refresh_token'
+            , 'refresh_token': ref_token
+        }
+        target_url: str = Communicator.api_base + Communicator.api_token
+        # Evaluating response
+        req = requests.post(target_url, headers=headers, data=data,
+                            auth=(Communicator.client_id, Communicator.client_secret))
+        if req.status_code != 200:
+            # Logger.Logger.log_error('Failed to refresh tokens in token_refresh()' + req.text)
+            return -1, {'error_message': f'request error: {req.text}'}
+        req = req.json()
+        # Updating database with new tokens
+        access_timestamp: float = datetime.datetime.now().timestamp()
+        access_token = req['access_token']
+        refresh_token = req['refresh_token']
+        user_id: int = session.get('user_id')
+        ret = db.update_tokens(access_token, access_timestamp, refresh_token
+                               , access_timestamp, user_id)
+        if ret[0] != 0:
+            return ret
+        return 0, {}
 
     # @staticmethod
     # def _get_token() -> Tuple[int, dict]:
@@ -182,9 +208,9 @@ class Communicator:
         """
             Deals with customer tokens
 
-            Returns true if there is valid access token to use.
+            Return code 0 if there is valid access token to use.
             If the access token is expired but there is a valid refresh token,
-            it will retrieve a new pair of tokens from Kroger before returning true.
+            it will retrieve a new pair of tokens from Kroger before returning 0.
 
             If neither token is valid, returns false
         """
@@ -199,8 +225,8 @@ class Communicator:
             print("In token check. Returning 0 ret ")
             return 0, {'success_message': 'valid access token'}
         if Communicator._check_rtoken(tokens['refresh_timestamp']):
-            # @todo token refresh function
-            ...
+            print('refreshing tokens')
+            return Communicator._refresh_tokens(tokens['refresh_token'])
         # No valid tokens
         return -2, {'error_message': 'No valid tokens'}
 
