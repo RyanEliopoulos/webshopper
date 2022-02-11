@@ -73,6 +73,7 @@ def set_ctoken(db_cursor: sqlite3.Cursor
 
 def update_tokens(access_token: str, access_timestamp: float, refresh_token: str
                   , refresh_timestamp: float, user_id: int) -> Tuple[int, dict]:
+    print('Updating tokens')
     query = """ UPDATE user
                 SET    
                     access_token = ? 
@@ -88,7 +89,7 @@ def update_tokens(access_token: str, access_timestamp: float, refresh_token: str
                                        refresh_token,
                                        refresh_timestamp,
                                        user_id))
-    if ret[0] != 0:
+    if ret[0] == 0:
         db.commit()
     return ret
 
