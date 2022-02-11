@@ -107,7 +107,7 @@ def trade_authcode():
     """
     # Utilize Communicator now.
     auth_code: str = request.args.get('code')
-    return render_template(f'auth_code: {auth_code}')
+    return f'{auth_code}'
 
 
 @bp.route('/logout')
