@@ -25,10 +25,10 @@ CREATE TABLE user (
     username TEXT UNIQUE NOT NULL,
     password_hash TEXT NOT NULL,
     location_id TEXT,
-    access_token TEXT,
-    access_timestamp INTEGER,
-    refresh_token TEXT,
-    refresh_timestamp INTEGER
+    access_token TEXT DEFAULT 'default',
+    access_timestamp INTEGER DEFAULT 0,
+    refresh_token TEXT DEFAULT 'default',
+    refresh_timestamp INTEGER DEFAULT 0
 );
 
 CREATE TABLE tokens (
