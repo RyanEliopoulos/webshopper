@@ -33,11 +33,11 @@ def set_location():
         print(f"Stores: {stores}")
         return 'Here is the list of nearby stores'
 
-    
+
 @bp.route('/products', methods=('GET', 'POST'))
 @login_required
 @token_required
-def set_location():
+def products():
 
     # Ask user to enter in their area code
     # Have the client submit a request to our API endpoint that
