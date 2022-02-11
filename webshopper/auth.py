@@ -115,7 +115,7 @@ def trade_authcode():
     ret = update_tokens(token_dict['access_token'],
                         token_dict['access_timestamp'],
                         token_dict['refresh_token'],
-                        token_dict['refres_timestamp'],
+                        token_dict['refresh_timestamp'],
                         session.get('user_id'))
     if ret[0] != 0:
         return f'error updating tokens in db: {ret[1]}'
