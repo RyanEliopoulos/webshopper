@@ -79,7 +79,7 @@ def update_tokens(access_token: str, access_timestamp: float, refresh_token: str
                     , access_timestamp = ?
                     , refresh_token = ?
                     , refresh_timestamp = ?
-                WHERE user_id = ?
+                WHERE id = ?
             """
     db: sqlite3.Connection = get_db()
     curs = db.cursor()
