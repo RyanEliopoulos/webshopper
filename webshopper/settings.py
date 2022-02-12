@@ -36,7 +36,7 @@ def set_location():
         for element in data:
             address: str = element['address']
             chain: str = element['chain']
-            if chain != 'SHELL COMPANY':
+            if chain not in ('SHELL COMPANY', 'JEWELRY'):
                 print(f'{chain}: {address}')
 
         return f'Here is the list of nearby stores: {stores}'
