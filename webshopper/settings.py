@@ -29,8 +29,12 @@ def set_location():
         # Communicator.search_stores(request.ZipCode)  # Communicator does the messing with the database stuff.
         zip_code: str = request.form['ZipBox']
         print(f'This is the zip code: {zip_code}')
-        stores = Communicator.search_locations(zip_code)
-        print(f"Stores: {stores}")
+        ret = Communicator.search_locations(zip_code)
+        stores: dict = ret[1]
+        results: dict = stores['results']
+        for key in results.keys():
+            print(key)
+
         return f'Here is the list of nearby stores: {stores}'
 
 
