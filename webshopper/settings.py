@@ -32,8 +32,11 @@ def set_location():
         ret = Communicator.search_locations(zip_code)
         stores: dict = ret[1]
         results: dict = stores['results']
-        for key in results.keys():
-            print(key)
+        data: list = results['data']  # a list of dictionaries, each representing a store
+        for element in data:
+            address: str = element['address']
+            chain: str = element['chain']
+            print(f'{chain}: {address}')
 
         return f'Here is the list of nearby stores: {stores}'
 
