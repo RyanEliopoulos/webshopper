@@ -240,7 +240,7 @@ class Communicator:
         # Must be params. Call requests.get with these classed as 'data' failed the API call
         params = {
             'filter.zipCode.near': zipcode,
-            'filter.limit': '25'
+            'filter.limit': '50'
         }
         target_url: str = Communicator.api_base + 'locations'
         req: requests.Response = requests.get(target_url, headers=headers, params=params)
