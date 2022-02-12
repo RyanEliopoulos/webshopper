@@ -239,7 +239,8 @@ class Communicator:
         }
         # Must be params. Call requests.get with these classed as 'data' failed the API call
         params = {
-            'filter.zipCode.near': zipcode
+            'filter.zipCode.near': zipcode,
+            'filter.limit': '25'
         }
         target_url: str = Communicator.api_base + 'locations'
         req: requests.Response = requests.get(target_url, headers=headers, params=params)
@@ -261,7 +262,7 @@ class Communicator:
         }
         params = {
             'filter.term': search_term,
-            'filter.locationId': '70100140',
+            'filter.locationId': '70100140', #@TODO Remove this harcoded value
             'filter.fulfillment': 'csp',
             'filter.start': '1',
             'filter.limit': '5',
