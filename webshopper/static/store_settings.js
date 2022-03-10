@@ -1,4 +1,3 @@
-console.log("Here I am");
 
 function testingyo() {
     alert('gotem');
