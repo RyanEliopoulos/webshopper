@@ -226,7 +226,7 @@ def token_required(view):
         return_code = ret[0]
         if return_code == -1:
             # DB or request error to Kroger API
-            return render_template(f'{ret}')
+            return f'{ret}'
         if return_code == -2:
             print('No valid tokens')
             return redirect(url_for('auth.get_authcode'))

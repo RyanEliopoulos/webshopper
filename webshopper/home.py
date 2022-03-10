@@ -37,6 +37,6 @@ def homepage():
     # Check if the user has selected a location yet
     if session.get('location_id') is None:
         print('location_id is none')
-        return redirect(url_for('settings.set_location'))
+        return redirect(url_for('settings.store_settings'))
     # Location id is set
     return render_template('homepage.html')
