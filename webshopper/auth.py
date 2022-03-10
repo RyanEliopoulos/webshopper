@@ -49,6 +49,8 @@ def login():
                 session['user_id'] = user['id']
                 session['username'] = user['username']
                 session['location_id'] = user['location_id']
+                session['location_brand'] = user['location_brand']
+                session['location_address'] = user['location_address']
                 return redirect(url_for('home.homepage'))
 
         flash(error)

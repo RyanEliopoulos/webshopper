@@ -1,16 +1,24 @@
 
 
 
-<h1> Current Store settings: {{g.location_id}}, {{g.location_brand}}, {{g.location_address}}</h1>
-
 <script src="{{url_for('static', filename='store_settings.js')}}"></script>
-<h1 style="color:red"> You need to select a store</h1>
- <form method="post" target="">
-    <label for="ZipBox">Enter your zip code</label> <br>
-    <input name="ZipBox" id="ZipBox" value="" required>
-    <input type="submit" value="ok">
-  </form>
+
+{% if g.location_id is none %}
+<h1> Current Store settings: {{g.location_id}}, {{g.location_brand}}, {{g.location_address}}</h1>
+{% else %}
+<h1 style="color:red"> You have not selected a store.</h1>
+{% endif %}
 
 
+<label for="zipbox">Enter Zip Code</label>
+<input type="text" id="zipbox" name="zipbox"> <br>
+<button type="button">Submit</button>
 
-<script type="text/javascript"> testingyo();</script>
+
+<!-- <form method="post" target="{{url_for(">-->
+<!--    <label for="ZipBox">Enter your zip code</label> <br>-->
+<!--    <input name="ZipBox" id="ZipBox" value="" required>-->
+<!--    <input type="submit" value="ok">-->
+<!--  </form>-->
+
+
