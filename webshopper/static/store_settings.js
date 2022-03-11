@@ -3,8 +3,6 @@ function submit_listener() {
     // Should be able to retrieve the
     let sub_btn = document.getElementById("submit_button");
     sub_btn.addEventListener("click", get_locations);
-
-    console.log(`Also checking the storage thing: ${url}`);
 }
 
 
