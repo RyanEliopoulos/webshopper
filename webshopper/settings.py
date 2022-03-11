@@ -65,14 +65,19 @@ def get_locations():
         return Response(ret[1], status=400, mimetype="application/json")
     # Got our results list.. Now what?
     stores: dict = ret[1]['results']['data']  # list of dicts, each representing a store
-    results: dict = {}
+    results: list = []
     for element in stores:
-        print(element)
+        location_id: str = element['locationId']
         address: str = element['address']
         chain: str = element['chain']
         if chain not in ('SHELL COMPANY', 'JEWELRY'):
-            ...
-            # print(f'{chain}: {address}')
+            tmp: dict = {
+                'locationId': location_id,
+                'address': address,
+                'chain': chain
+            }
+            results.append(tmp)
+    return {'results': results}
 
 @bp.route('/products', methods=('GET', 'POST'))
 @login_required
