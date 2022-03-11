@@ -14,8 +14,9 @@
 <input type="text" id="zipbox_input" name="zipbox"> <br>
 <button type="button">Submit</button>
 
-<script>submit_listener({{ url_for('settings.get_locations') }})
-    console.log({{ url_for('settings.get_locations') }}
+<script type="text/javascript">
+    submit_listener('{{ url_for('settings.get_locations') }}');
+    console.log('{{ url_for('settings.get_locations') }}');
     console.log('I am here');
 
 </script>
