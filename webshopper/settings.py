@@ -3,7 +3,8 @@ from webshopper.communicator import Communicator
 from webshopper.auth import (login_required, token_required)
 
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, session, url_for
+    Blueprint, flash, g, redirect, render_template, request, session, url_for,
+    jsonify, Response
 )
 
 
@@ -41,6 +42,37 @@ def store_settings():
     #
     #     return f'Here is the list of nearby stores: {stores}'
 
+
+@bp.route('/location/get')
+def get_locations():
+    """ API endpoint
+        Retrieves locations based on the submitted zip code.
+        Zip code submitted as a query parameter
+        @TODO input validation on the zipcode string
+
+    """
+    user_id: int = session.get("user_id")
+    if user_id is None:
+        return Response("{'error': 'no user id'}", status=403, mimetype="application/json")
+    # Getting zip code
+    zipcode: str = request.args.get('zipcode')
+    if zipcode is None:
+        return Response("{'error': 'no zipcode provided'}", status=400, mimetype="application/json")
+
+    # Sending zip code to Kroger for store locations
+    ret = Communicator.search_locations(zipcode)
+    if ret[0] != 0:  # Error returned from Kroger
+        return Response(ret[1], status=400, mimetype="application/json")
+    # Got our results list.. Now what?
+    stores: dict = ret[1]['results']['data']  # list of dicts, each representing a store
+    results: dict = {}
+    for element in stores:
+        print(element)
+        address: str = element['address']
+        chain: str = element['chain']
+        if chain not in ('SHELL COMPANY', 'JEWELRY'):
+            ...
+            # print(f'{chain}: {address}')
 
 @bp.route('/products', methods=('GET', 'POST'))
 @login_required

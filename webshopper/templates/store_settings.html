@@ -10,9 +10,12 @@
 {% endif %}
 
 
-<label for="zipbox">Enter Zip Code</label>
-<input type="text" id="zipbox" name="zipbox"> <br>
+<label for="zipbox_input" id="zipbox_label">Enter Zip Code</label>
+<input type="text" id="zipbox_input" name="zipbox"> <br>
 <button type="button">Submit</button>
+
+<script>submit_listener({{url_for(settings.get_locations)}})</script>
+<!-- Set event listener on the button-->
 
 
 
