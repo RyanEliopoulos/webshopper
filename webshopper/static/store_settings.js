@@ -15,7 +15,7 @@ function get_locations() {
 //    let url = new URL(`${window.location.protocsessionStorage.getItem('get_location_url'), );
     let url_string = sessionStorage.getItem('get_location_url');
     let url = new URL(url_string);
-    url.set('zipcode', zipcode);
+    url.searchParams.append('zipcode', zipcode);
     // Initializing request and attaching callback function
     let response = fetch(url, {
         method: 'GET',
