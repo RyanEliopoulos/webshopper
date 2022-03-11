@@ -9,8 +9,8 @@ function submit_listener() {
 function get_locations() {
     console.log('in get_locations');
     let zipcode = document.getElementById('zipbox_input').value;
-    let url = sessionStorage.getItem('get_location_url');
-
+    let url = new URL(sessionStorage.getItem('get_location_url'));
+    url.set('zipcode', zipcode);
     // Initializing request and attaching callback function
     let response = fetch(url, {
         method: 'GET',
