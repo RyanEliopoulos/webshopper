@@ -16,7 +16,7 @@
 
 <script type="text/javascript">
     // Moving API endpoint strings to client storage.
-    sessionStorage.setItem('get_location_url', '{{ url_for('settings.get_locations') }}');
+    sessionStorage.setItem('get_location_url', '{{ url_for('settings.get_locations', _external=True) }}');
     submit_listener();
 
 </script>
