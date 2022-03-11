@@ -23,7 +23,7 @@ function get_locations() {
     }).then (response => response.json())
     .then
        ( data => {
-          console.log(results);
+          console.log(data.results);
 //        console.log(`Received response ${response.status} ${response.statusText}`);
 //        console.log(`${response.body}`);
 //        console.log(`${response.json()}`);
