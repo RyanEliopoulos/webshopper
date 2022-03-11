@@ -2,7 +2,9 @@
 function submit_listener() {
     // Should be able to retrieve the
     let sub_btn = document.getElementById("submit_button");
-    sub_btn.onclick = get_locations();
+    sub_btn.addEventListener("click", get_locations);
+//    sub_btn.onclick = get_locations;
+
 //    sub_btn.addEventListener("Mouse", (event) => {
 //        // Input validation would go here
 //        let zipcode = document.getElementById("zipbox_input").value;
