@@ -9,10 +9,6 @@ function submit_listener() {
 function get_locations() {
     console.log('in get_locations');
     let zipcode = document.getElementById('zipbox_input').value;
-    console.log(` Here is the host name${window.location.protocol}`);
-    console.log(` Here is the host name${window.location.hostname}`);
-//    let url_string = window.location.protocol + '//' + window.location.hostname + ':5000'
-//    let url = new URL(`${window.location.protocsessionStorage.getItem('get_location_url'), );
     let url_string = sessionStorage.getItem('get_location_url');
     let url = new URL(url_string);
     url.searchParams.append('zipcode', zipcode);
@@ -20,9 +16,9 @@ function get_locations() {
     let response = fetch(url, {
         method: 'GET',
         credentials: 'include'
-    }).then (response => response.json())
-    .then
-       ( data => {
+    })
+    .then (response => response.json())  // Deserializing the json response
+    .then  ( data => { // Working with the json object
           console.log(data.results);
 //        console.log(`Received response ${response.status} ${response.statusText}`);
 //        console.log(`${response.body}`);

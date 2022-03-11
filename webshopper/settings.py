@@ -77,7 +77,7 @@ def get_locations():
                 'chain': chain
             }
             results.append(tmp)
-    return {'results': results}
+    return jsonify(results=results)
 
 @bp.route('/products', methods=('GET', 'POST'))
 @login_required
