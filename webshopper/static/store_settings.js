@@ -22,6 +22,8 @@ function get_locations() {
         credentials: 'include'
     }).then( response => {
         console.log(`Received response ${response.status} ${response.statusText}`);
+        console.log(`${response.body}`);
+        console.log(`${response.json()}`);
     });
 }
 
