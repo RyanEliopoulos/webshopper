@@ -60,7 +60,7 @@ function list_cleanup() {
         return;
     }
 
-    console.log(elements.typeof);
+    console.log(typeof(elements));
     elements.foreach(element => {
         element.remove();
     });
