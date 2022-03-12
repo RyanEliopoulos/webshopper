@@ -21,7 +21,7 @@ function get_locations() {
     .then  ( data => { // Working with the json object
             // @TODO response parsing here? Not sure
           console.log(data.results);
-          update_ui_locations(data);
+          update_ui_locations(data.results);
           // So we have the store locations. Remove old html elements
           // and replace with a list of locations to choose from
 
