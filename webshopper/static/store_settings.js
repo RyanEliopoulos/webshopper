@@ -55,7 +55,7 @@ function update_ui_locations(locations) {
 function list_cleanup() {
     // Finds and deletes all list item containers
     let elements = document.getElementsByClassName('location_item');
-    if (typeof(elements'' === 'undefined') {
+    if (typeof(elements) === 'undefined') {
         console.log('Yep, it\'s undefined');
         return;
     }
