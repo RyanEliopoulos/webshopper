@@ -20,7 +20,7 @@ function get_locations() {
     .then (response => response.json())  // Deserializing the json response
     .then  ( data => { // Working with the json object
             // @TODO response parsing here? Not sure
-          console.log(data.results);
+          console.log(`data.results: ${data.results}`);
           update_ui_locations(data.results);
           // So we have the store locations. Remove old html elements
           // and replace with a list of locations to choose from
@@ -55,7 +55,7 @@ function update_ui_locations(locations) {
 function list_cleanup() {
     // Finds and deletes all list item containers
     let elements = document.getElementsByClassName('location_item');
-    if (elements == undefined) {
+    if (typeof(elements'' === 'undefined') {
         console.log('Yep, it\'s undefined');
         return;
     }
