@@ -7,9 +7,7 @@ function submit_listener() {
 
 
 function get_locations(event) {
-    // TESTING EVEN OBJECT
-    console.log(`event.id: ${event.id}`);
-    console.log(`event.currentTarget: ${event.currentTarget}`);
+    console.log(`event.currentTarget: ${event.currentTarget}`);  // Element triggering the event
 
     console.log('in get_locations');
     let zipcode = document.getElementById('zipbox_input').value;
@@ -39,7 +37,6 @@ function update_ui_locations(locations) {
     // Remove existing buttons/elements
     list_cleanup();
     // update with a list of elements..how do we record selection?
-    console.log(locations);
     locations.forEach(element => {
         // Updating new div with store details
         build_list_item(element);
@@ -58,6 +55,7 @@ function build_list_item(element) {
     store_div.classList.add('location_item');
     // building store chain details
     let chain_div = document.createElement("div");
+    store_div.appendChild(chain_div);
     chain_div.classList.add('chain_div');
     let chain_node = document.createTextNode(element.chain);
     chain_div.appendChild(chain_node);
@@ -65,21 +63,25 @@ function build_list_item(element) {
     // Address Line
     let addr_div = document.createElement("div");
     addr_div.classList.add('addr_div');
+    store_div.appendChild(addr_div);
     let addrline_node = document.createTextNode(element.address.addressLine);
     addr_div.appendChild(addrline_node);
     // City
     let addrcity_div = document.createElement("div");
     addrcity_div.classList.add('addrcity_div');
+    store_div.appendChild(addrcity_div);
     let addr_city_node = document.createTextNode(element.address.city);
     addrcity_div.appendChild(addr_city_node);
     // State
     let addr_state_div = document.createElement("div");
     addr_state_div.classList.add('addr_state_div');
+    store_div.appendChild(addr_state_div);
     let addr_state_node = document.createTextNode(element.address.state);
     addr_state_div.appendChild(addr_state_node);
     // Zipcode
     let addr_zipcode_div = document.createElement("div");
     addr_zipcode_div.classList.add('addr_zipcode_div');
+    store_div.appendChild(addr_zipcode_div);
     let addr_zipcode = document.createTextNode(element.address.zipCode);
     addr_zipcode_div.appendChild(addr_zipcode);
 
