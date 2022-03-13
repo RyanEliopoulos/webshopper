@@ -6,7 +6,11 @@ function submit_listener() {
 }
 
 
-function get_locations() {
+function get_locations(event) {
+    // TESTING EVEN OBJECT
+    console.log(`event.id: ${event.id}`);
+    console.log(`event.currentTarget: ${event.currentTarget}`);
+
     console.log('in get_locations');
     let zipcode = document.getElementById('zipbox_input').value;
     let url_string = sessionStorage.getItem('get_location_url');
@@ -35,27 +39,70 @@ function update_ui_locations(locations) {
     // Remove existing buttons/elements
     list_cleanup();
     // update with a list of elements..how do we record selection?
-    let main_div = document.getElementById('main_div');  // To attach the new list divs onto
     console.log(locations);
     locations.forEach(element => {
         // Updating new div with store details
-        let tmp_div = document.createElement("div");
-        tmp_div.classList.add('location_item');
-        let chain_node = document.createTextNode(element.chain);
-        tmp_div.appendChild(chain_node);
-        let br = document.createElement("br");
-        tmp_div.appendChild(br);
-        let addressLine = document.createTextNode(element.address.addressLine1);
-        tmp_div.appendChild(addressLine);
-        let city_node = document.createTextNode(element.address.city);
-        tmp_div.appendChild(city_node);
-        let state_node = document.createTextNode(element.address.state);
-        tmp_div.appendChild(state_node);
-        let zip_node = document.createTextNode(element.address.zipCode);
-        tmp_div.appendChild(zip_node);
-        // Adding this div to the main div
-        main_div.appendChild(tmp_div);
+        build_list_item(element);
     });
+}
+
+
+function build_list_item(element) {
+    /* helper function for update_ui_locations
+        Constructs an inner div containing a particular store's data
+     */
+
+    let main_div = document.getElementById('main_div');  // To attach the new list divs onto
+
+    let store_div = document.createElement("div");  // Going to store successive divs, each with a piece of store data
+    store_div.classList.add('location_item');
+    // building store chain details
+    let chain_div = document.createElement("div");
+    chain_div.classList.add('chain_div');
+    let chain_node = document.createTextNode(element.chain);
+    chain_div.appendChild(chain_node);
+    // Building  address divs
+    // Address Line
+    let addr_div = document.createElement("div");
+    addr_div.classList.add('addr_div');
+    let addrline_node = document.createTextNode(element.address.addressLine);
+    addr_div.appendChild(addrline_node);
+    // City
+    let addrcity_div = document.createElement("div");
+    addrcity_div.classList.add('addrcity_div');
+    let addr_city_node = document.createTextNode(element.address.city);
+    addrcity_div.appendChild(addr_city_node);
+    // State
+    let addr_state_div = document.createElement("div");
+    addr_state_div.classList.add('addr_state_div');
+    let addr_state_node = document.createTextNode(element.address.state);
+    addr_state_div.appendChild(addr_state_node);
+    // Zipcode
+    let addr_zipcode_div = document.createElement("div");
+    addr_zipcode_div.classList.add('addr_zipcode_div');
+    let addr_zipcode = document.createTextNode(element.address.zipCode);
+    addr_zipcode_div.appendChild(addr_zipcode);
+
+    // Adding  these to the primary div holder
+    main_div.appendChild(store_div);
+
+    // Adding the onclick
+
+
+    // tmp_div.classList.add('location_item');
+    // let chain_node = document.createTextNode(element.chain);
+    // tmp_div.appendChild(chain_node);
+    // let br = document.createElement("br");
+    // tmp_div.appendChild(br);
+    // let addressLine = document.createTextNode(element.address.addressLine1);
+    // tmp_div.appendChild(addressLine);
+    // let city_node = document.createTextNode(element.address.city);
+    // tmp_div.appendChild(city_node);
+    // let state_node = document.createTextNode(element.address.state);
+    // tmp_div.appendChild(state_node);
+    // let zip_node = document.createTextNode(element.address.zipCode);
+    // tmp_div.appendChild(zip_node);
+    // // Adding this div to the main div
 }
 
 function list_cleanup() {
