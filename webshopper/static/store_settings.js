@@ -47,8 +47,14 @@ function update_ui_locations(locations) {
         tmp_div.appendChild(chain_node);
         let br = document.createElement("br");
         tmp_div.appendChild(br);
-        let address_node = document.createTextNode(element.address);
-        tmp_div.appendChild(address_node);
+        let addressLine = document.createTextNode(element.address.addressLine1);
+        tmp_div.appendChild(addressLine);
+        let city_node = document.createTextnode(element.address.city);
+        tmp_div.appendChild(city_node);
+        let state_node = document.createTextnode(element.address.state);
+        tmp_div.appendChild(state_node);
+        let zip_node = document.createTextnode(element.address.zipCode);
+        tmp_div.appendChild(zip_node);
         // Adding this div to the main div
         main_div.appendChild(tmp_div);
     });
