@@ -65,10 +65,14 @@ function list_cleanup() {
     // Finds and deletes all list item containers
     let elements = document.getElementsByClassName('location_item');
     if (elements.length === 0) return;
-    console.log(elements);
-    elements.forEach(element => {
-        element.remove();
-    });
+    Array.prototype.forEach(elements, element => {
+        console.log('worked baby');
+        console.log(element);
+    })
+    // console.log(elements);
+    // elements.forEach(element => {
+    //     element.remove();
+    // });
 }
 
 
