@@ -38,7 +38,7 @@ function update_ui_locations(locations) {
     list_cleanup();
     // update with a list of elements..how do we record selection?
     for (let i = 0; i < locations.length; i++) {
-        build_list_item(element, i);
+        build_list_item(locations[i], i);
     }
     // locations.forEach(element => {
     //     // Updating new div with store details
