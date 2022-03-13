@@ -116,7 +116,7 @@ function build_list_item(element, element_id) {
             }
         }
         // Updating state of the new selected item div and saving to storage
-        event.currentTarget.style.backgroundColor = 'yellow';
+        event.currentTarget.style.backgroundColor = 'green';
         sessionStorage.setItem('selected_item', event.currentTarget.id);
         console.log(`setting selected item to id ${event.currentTarget.id}`);
     });
