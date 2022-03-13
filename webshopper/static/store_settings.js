@@ -19,12 +19,12 @@ function get_locations() {
     })
     .then (response => response.json())  // Deserializing the json response
     .then  ( data => { // Working with the json object
-            // @TODO response parsing here? Not sure
-          console.log(`data.results: ${data.results}`);
-          update_ui_locations(data.results);
-          // So we have the store locations. Remove old html elements
-          // and replace with a list of locations to choose from
-
+        // @TODO response parsing here? Not sure
+        console.log(`data.results: ${data.results}`);
+        console.log(data.results);
+        update_ui_locations(data.results);
+        // So we have the store locations. Remove old html elements
+        // and replace with a list of locations to choose from
     });
 }
 
@@ -38,6 +38,7 @@ function update_ui_locations(locations) {
     list_cleanup();
     // update with a list of elements..how do we record selection?
     let main_div = document.getElementById('main_div');  // To attach the new list divs onto
+    console.log(typeof(locations));
     locations.foreach(element => {
         // Updating new div with store details
         let tmp_div = document.createElement("div");
