@@ -63,13 +63,17 @@ function list_cleanup() {
     let elements = document.getElementsByClassName('location_item');
     console.log(`length of the location_itme array: ${elements.length}`);
     if (elements.length === 0) return;
-    Array.prototype.forEach.call(elements, element => {
-        console.log(element);
+    let len = elements.length;
+    for (let i = 0; i < len; i++) {
+        let element = elements[i];
         while (element.firstChild) {
             element.removeChild(element.firstChild);
         }
         element.remove();
     });
+    }
+    Array.prototype.forEach.call(elements, element => {
+        console.log(element);
 }
 
 
