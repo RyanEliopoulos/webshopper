@@ -43,6 +43,7 @@ function update_ui_locations(locations) {
     locations.forEach(element => {
         // Updating new div with store details
         let tmp_div = document.createElement("div");
+        tmp_div.classList.add('location_item');
         let chain_node = document.createTextNode(element.chain);
         tmp_div.appendChild(chain_node);
         let br = document.createElement("br");
