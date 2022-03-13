@@ -55,15 +55,10 @@ function update_ui_locations(locations) {
 function list_cleanup() {
     // Finds and deletes all list item containers
     let elements = document.getElementsByClassName('location_item');
-    console.log(`the desired length value: ${elements.length}`);
-    if (typeof(elements) === 'undefined') {
-        console.log('Yep, it\'s undefined');
-        return;
-    }
-
-    // elements.foreach(element => {
-    //     element.remove();
-    // });
+    if (elements.length === 0) return;
+    elements.foreach(element => {
+        element.remove();
+    });
 }
 
 
