@@ -66,17 +66,12 @@ function list_cleanup() {
     let elements = document.getElementsByClassName('location_item');
     if (elements.length === 0) return;
     Array.prototype.forEach.call(elements, element => {
-        console.log('worked baby');
         console.log(element);
         while (element.firstChild) {
             element.removeChild(element.firstChild);
         }
         element.remove();
     });
-    // console.log(elements);
-    // elements.forEach(element => {
-    //     element.remove();
-    // });
 }
 
 
