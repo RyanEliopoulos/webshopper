@@ -41,6 +41,14 @@ function update_ui_locations(locations) {
         // Updating new div with store details
         build_list_item(element);
     });
+
+    // Alternating colors for readability
+    let location_items = document.getElementsByClassName('location_item');
+    for (let i = 0; i < location_items.length; i++) {
+        if (i % 2 === 0) {
+            location_items[i].style.backgroundColor = 'lightblue';
+        }
+    }
 }
 
 
