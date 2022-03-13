@@ -71,8 +71,6 @@ function list_cleanup() {
         }
         element.remove();
     }
-    Array.prototype.forEach.call(elements, element => {
-        console.log(element);
 }
 
 
