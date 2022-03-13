@@ -68,6 +68,7 @@ function list_cleanup() {
     Array.prototype.forEach.call(elements, element => {
         console.log('worked baby');
         console.log(element);
+        element.remove();
     })
     // console.log(elements);
     // elements.forEach(element => {
