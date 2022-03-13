@@ -61,6 +61,7 @@ function update_ui_locations(locations) {
 function list_cleanup() {
     // Finds and deletes all list item containers
     let elements = document.getElementsByClassName('location_item');
+    console.log(`length of the location_itme array: ${elements.length}`);
     if (elements.length === 0) return;
     Array.prototype.forEach.call(elements, element => {
         console.log(element);
