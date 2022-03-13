@@ -64,7 +64,7 @@ function build_list_item(element) {
     let addr_div = document.createElement("div");
     addr_div.classList.add('addr_div');
     store_div.appendChild(addr_div);
-    let addrline_node = document.createTextNode(element.address.addressLine);
+    let addrline_node = document.createTextNode(element.address.addressLine1);
     addr_div.appendChild(addrline_node);
     // City
     let addrcity_div = document.createElement("div");
