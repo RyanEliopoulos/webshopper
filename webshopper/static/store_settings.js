@@ -45,23 +45,16 @@ function update_ui_locations(locations) {
         let tmp_div = document.createElement("div");
         tmp_div.classList.add('location_item');
         let chain_node = document.createTextNode(element.chain);
-        chain_node.classList.add('location_item');
         tmp_div.appendChild(chain_node);
         let br = document.createElement("br");
-        br.classList.add('location_item');
-
         tmp_div.appendChild(br);
         let addressLine = document.createTextNode(element.address.addressLine1);
-        addressLine.classList.add('location_item');
         tmp_div.appendChild(addressLine);
         let city_node = document.createTextNode(element.address.city);
-        city_node.classList.add('location_item');
         tmp_div.appendChild(city_node);
         let state_node = document.createTextNode(element.address.state);
-        state_node.classList.add('location_item');
         tmp_div.appendChild(state_node);
         let zip_node = document.createTextNode(element.address.zipCode);
-        zip_node.classList.add('location_item');
         tmp_div.appendChild(zip_node);
         // Adding this div to the main div
         main_div.appendChild(tmp_div);
@@ -75,8 +68,11 @@ function list_cleanup() {
     Array.prototype.forEach.call(elements, element => {
         console.log('worked baby');
         console.log(element);
+        while (element.firstChild) {
+            element.removeChild(element.firstChild);
+        }
         element.remove();
-    })
+    });
     // console.log(elements);
     // elements.forEach(element => {
     //     element.remove();
