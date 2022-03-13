@@ -65,7 +65,7 @@ function list_cleanup() {
     // Finds and deletes all list item containers
     let elements = document.getElementsByClassName('location_item');
     if (elements.length === 0) return;
-    elements.foreach(element => {
+    elements.forEach(element => {
         element.remove();
     });
 }
