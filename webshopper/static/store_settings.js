@@ -39,6 +39,7 @@ function update_ui_locations(locations) {
     // update with a list of elements..how do we record selection?
     let main_div = document.getElementById('main_div');  // To attach the new list divs onto
     console.log(typeof(locations));
+    console.log(locations);
     locations.foreach(element => {
         // Updating new div with store details
         let tmp_div = document.createElement("div");
