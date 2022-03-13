@@ -64,7 +64,7 @@ function list_cleanup() {
     console.log(`length of the location_itme array: ${elements.length}`);
     if (elements.length === 0) return;
     let len = elements.length;
-    for (let i = 0; i < len; i++) {
+    for (let i = 0; i < len; ) {
         let element = elements[i];
         while (element.firstChild) {
             element.removeChild(element.firstChild);
