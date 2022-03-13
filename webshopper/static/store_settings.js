@@ -49,11 +49,11 @@ function update_ui_locations(locations) {
         tmp_div.appendChild(br);
         let addressLine = document.createTextNode(element.address.addressLine1);
         tmp_div.appendChild(addressLine);
-        let city_node = document.createTextnode(element.address.city);
+        let city_node = document.createTextNode(element.address.city);
         tmp_div.appendChild(city_node);
-        let state_node = document.createTextnode(element.address.state);
+        let state_node = document.createTextNode(element.address.state);
         tmp_div.appendChild(state_node);
-        let zip_node = document.createTextnode(element.address.zipCode);
+        let zip_node = document.createTextNode(element.address.zipCode);
         tmp_div.appendChild(zip_node);
         // Adding this div to the main div
         main_div.appendChild(tmp_div);
