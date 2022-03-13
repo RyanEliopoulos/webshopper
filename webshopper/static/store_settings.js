@@ -40,7 +40,7 @@ function update_ui_locations(locations) {
     let main_div = document.getElementById('main_div');  // To attach the new list divs onto
     console.log(typeof(locations));
     console.log(locations);
-    locations.foreach(element => {
+    locations.forEach(element => {
         // Updating new div with store details
         let tmp_div = document.createElement("div");
         let chain_node = document.createTextNode(element.chain);
