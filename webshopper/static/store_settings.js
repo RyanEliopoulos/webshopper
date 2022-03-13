@@ -37,10 +37,13 @@ function update_ui_locations(locations) {
     // Remove existing buttons/elements
     list_cleanup();
     // update with a list of elements..how do we record selection?
-    locations.forEach(element => {
-        // Updating new div with store details
-        build_list_item(element);
-    });
+    for (let i = 0; i < locations.length; i++) {
+        build_list_item(element, i);
+    }
+    // locations.forEach(element => {
+    //     // Updating new div with store details
+    //     build_list_item(element);
+    // });
 
     // Alternating colors for readability
     let location_items = document.getElementsByClassName('location_item');
@@ -52,15 +55,18 @@ function update_ui_locations(locations) {
 }
 
 
-function build_list_item(element) {
+function build_list_item(element, element_id) {
     /* helper function for update_ui_locations
         Constructs an inner div containing a particular store's data
+        element: Single store result back from Kroger locations API
+        element_id: Order the element came in. For client-side state tracking
      */
 
     let main_div = document.getElementById('main_div');  // To attach the new list divs onto
 
     let store_div = document.createElement("div");  // Going to store successive divs, each with a piece of store data
     store_div.classList.add('location_item');
+    store_div.id = element_id;
     // building store chain details
     let chain_div = document.createElement("div");
     store_div.appendChild(chain_div);
@@ -97,22 +103,23 @@ function build_list_item(element) {
     main_div.appendChild(store_div);
 
     // Adding the onclick
-
-
-    // tmp_div.classList.add('location_item');
-    // let chain_node = document.createTextNode(element.chain);
-    // tmp_div.appendChild(chain_node);
-    // let br = document.createElement("br");
-    // tmp_div.appendChild(br);
-    // let addressLine = document.createTextNode(element.address.addressLine1);
-    // tmp_div.appendChild(addressLine);
-    // let city_node = document.createTextNode(element.address.city);
-    // tmp_div.appendChild(city_node);
-    // let state_node = document.createTextNode(element.address.state);
-    // tmp_div.appendChild(state_node);
-    // let zip_node = document.createTextNode(element.address.zipCode);
-    // tmp_div.appendChild(zip_node);
-    // // Adding this div to the main div
+    store_div.addEventListener("click", event => {
+        // Need to highlight new selection and unhighlight old selection, if applicable
+        let selected_id = sessionStorage.getItem('selected_item'); // id of the item div
+        if (selected_id != null) {
+            let item_div = document.getElementById(selected_id);
+            if (selected_id % 2 === 0) {
+                item_div.style.backgroundColor = 'lightblue';
+            }
+            else {
+                item_div.style.backgroundColor = 'white';
+            }
+        }
+        // Updating state of the new selected item div and saving to storage
+        event.currentTarget.style.backgroundColor = 'darkblue';
+        sessionStorage.setItem('selected_item', event.currentTarget.id);
+        console.log(`setting selected item to id ${event.currentTarget.id}`);
+    });
 }
 
 function list_cleanup() {
