@@ -70,7 +70,7 @@ function list_cleanup() {
             element.removeChild(element.firstChild);
         }
         element.remove();
-    });
+    }
     Array.prototype.forEach.call(elements, element => {
         console.log(element);
 }
